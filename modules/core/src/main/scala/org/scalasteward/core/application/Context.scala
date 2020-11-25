@@ -42,6 +42,7 @@ import org.scalasteward.core.update.{ArtifactMigrations, FilterAlg, PruningAlg, 
 import org.scalasteward.core.util._
 import org.scalasteward.core.util.uri._
 import org.scalasteward.core.vcs.data.AuthenticatedUser
+import org.scalasteward.core.vcs.github.GitHubAppApiAlg
 import org.scalasteward.core.vcs.{VCSApiAlg, VCSExtraAlg, VCSRepoAlg, VCSSelection}
 
 object Context {
@@ -96,6 +97,7 @@ object Context {
       implicit val editAlg: EditAlg[F] = new EditAlg[F]
       implicit val nurtureAlg: NurtureAlg[F] = new NurtureAlg[F](config)
       implicit val pruningAlg: PruningAlg[F] = new PruningAlg[F]
+      implicit val gitHubAppApiAlg: GitHubAppApiAlg[F] = new GitHubAppApiAlg[F](config.vcsApiHost)
       new StewardAlg[F](config)
     }
 
