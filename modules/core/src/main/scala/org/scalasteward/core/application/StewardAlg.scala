@@ -48,7 +48,7 @@ final class StewardAlg[F[_]](config: Config)(implicit
     streamCompiler: Stream.Compiler[F, F],
     workspaceAlg: WorkspaceAlg[F],
     F: BracketThrow[F],
-    githubAppApiAlg: GitHubAppApiAlg[F]
+    val githubAppApiAlg: GitHubAppApiAlg[F]
 ) {
   private def readRepos(reposFile: File): Stream[F, Repo] =
     Stream.evals {
@@ -61,27 +61,31 @@ final class StewardAlg[F[_]](config: Config)(implicit
       }
     }
 
-  private def getGitHubAppRepos(githubApp: GitHubApp): Stream[F, Repo] =
+  def getGitHubAppRepos(githubApp: GitHubApp): Stream[F, Repo] =
     Stream.evals {
-      val jwt = github.authentication.createJWT(githubApp, 2.minutes)
-      for {
-        installations <- githubAppApiAlg.installations(jwt)
-        repositories <- installations.traverse { installation =>
-          githubAppApiAlg
-            .accessToken(jwt, installation.id)
-            .flatMap(token => githubAppApiAlg.repositories(token.token))
-        }
-      } yield repositories
-        .flatMap(_.repositories)
-        .map(repo =>
-          repo.full_name.split('/') match {
-            case Array(owner, name) =>
-              Repo(owner, name)
-          }
-        )
+      getGitHubAppRepos1(githubApp)
     }
 
-  private def steward(repo: Repo): F[Either[Throwable, Unit]] = {
+  def getGitHubAppRepos1(githubApp: GitHubApp): F[List[Repo]] = {
+    val jwt = github.authentication.createJWT(githubApp, 2.minutes)
+    for {
+      installations <- githubAppApiAlg.installations(jwt)
+      repositories <- installations.traverse { installation =>
+        githubAppApiAlg
+          .accessToken(jwt, installation.id)
+          .flatMap(token => githubAppApiAlg.repositories(token.token))
+      }
+    } yield repositories
+      .flatMap(_.repositories)
+      .map(repo =>
+        repo.full_name.split('/') match {
+          case Array(owner, name) =>
+            Repo(owner, name)
+        }
+      )
+  }
+
+  def steward(repo: Repo): F[Either[Throwable, Unit]] = {
     val label = s"Steward ${repo.show}"
     logger.infoTotalTime(label) {
       logger.attemptLog(util.string.lineLeftRight(label), Some(label)) {

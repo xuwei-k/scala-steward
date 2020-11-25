@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <!-- Pass -DLOG_LEVEL=<LOG_LEVEL> to override -->
-    <property scope="local" name="log_level" value="${LOG_LEVEL:-INFO}"/>
+    <property scope="local" name="log_level" value="${LOG_LEVEL:-DEBUG}"/>
     <!-- Pass -DROOT_LOG_LEVEL=<LOG_LEVEL> to override -->
-    <property scope="local" name="root_log_level" value="${ROOT_LOG_LEVEL:-INFO}"/>
+    <property scope="local" name="root_log_level" value="${ROOT_LOG_LEVEL:-DEBUG}"/>
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
