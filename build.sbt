@@ -83,18 +83,16 @@ lazy val core = myCrossProject("core")
   .settings(
     libraryDependencies ++= Seq(
       Dependencies.bcprovJdk15to18,
-      Dependencies.betterFiles,
+      Dependencies.betterFiles cross CrossVersion.for3Use2_13,
       Dependencies.catsCore,
       Dependencies.catsEffect,
       Dependencies.catsParse,
-      Dependencies.circeConfig,
       Dependencies.circeGeneric,
-      Dependencies.circeGenericExtras,
       Dependencies.circeParser,
       Dependencies.circeRefined,
       Dependencies.commonsIo,
-      Dependencies.coursierCore,
-      Dependencies.cron4sCore,
+      Dependencies.coursierCore cross CrossVersion.for3Use2_13,
+      Dependencies.cron4sCore cross CrossVersion.for3Use2_13,
       Dependencies.decline,
       Dependencies.fs2Core,
       Dependencies.fs2Io,
@@ -111,7 +109,7 @@ lazy val core = myCrossProject("core")
       Dependencies.scalacacheCaffeine,
       Dependencies.logbackClassic % Runtime,
       Dependencies.catsLaws % Test,
-      Dependencies.circeLiteral % Test,
+//      Dependencies.circeLiteral % Test,
       Dependencies.disciplineMunit % Test,
       Dependencies.http4sDsl % Test,
       Dependencies.http4sBlazeServer % Test,
@@ -121,6 +119,13 @@ lazy val core = myCrossProject("core")
       Dependencies.refinedScalacheck % Test,
       Dependencies.scalacheck % Test
     ),
+    conflictWarning := {
+      if (scalaBinaryVersion.value == "3") {
+        ConflictWarning("warn", Level.Warn, false)
+      } else {
+        conflictWarning.value
+      }
+    },
     assembly / test := {},
     assembly / assemblyMergeStrategy := {
       val nativeSuffix = "\\.(?:dll|jnilib|so)$".r
@@ -263,7 +268,7 @@ lazy val commonSettings = Def.settings(
 )
 
 lazy val compileSettings = Def.settings(
-  scalaVersion := Scala213,
+  scalaVersion := "3.1.2-RC1-bin-20220110-db34814-NIGHTLY",
   doctestTestFramework := DoctestTestFramework.Munit
 )
 
