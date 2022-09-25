@@ -4,20 +4,20 @@ import sbt.librarymanagement.syntax.ExclusionRule
 
 object Dependencies {
   val bcprovJdk15to18 = "org.bouncycastle" % "bcprov-jdk15to18" % "1.70"
-  val betterFiles = "com.github.pathikrit" %% "better-files" % "3.9.1"
+  val betterFiles = "com.github.pathikrit" %% "better-files" % "3.9.1" cross CrossVersion.for3Use2_13
   val catsEffect = "org.typelevel" %% "cats-effect" % "3.3.14"
   val catsCore = "org.typelevel" %% "cats-core" % "2.8.0"
   val catsLaws = "org.typelevel" %% "cats-laws" % catsCore.revision
   val catsParse = "org.typelevel" %% "cats-parse" % "0.3.8"
-  val circeConfig = "io.circe" %% "circe-config" % "0.8.0"
+  val circeConfig = "io.circe" %% "circe-config" % "0.8.0" cross CrossVersion.for3Use2_13 exclude ("io.circe", "*") exclude ("org.typelevel", "*")
   val circeGeneric = "io.circe" %% "circe-generic" % "0.14.2"
   val circeGenericExtras = "io.circe" %% "circe-generic-extras" % "0.14.2"
   val circeLiteral = "io.circe" %% "circe-literal" % circeGeneric.revision
   val circeParser = "io.circe" %% "circe-parser" % circeGeneric.revision
   val circeRefined = "io.circe" %% "circe-refined" % circeGeneric.revision
   val commonsIo = "commons-io" % "commons-io" % "2.11.0"
-  val coursierCore = "io.get-coursier" %% "coursier" % "2.1.0-M6"
-  val cron4sCore = "com.github.alonsodomin.cron4s" %% "cron4s-core" % "0.6.1"
+  val coursierCore = "io.get-coursier" %% "coursier" % "2.1.0-M6" cross CrossVersion.for3Use2_13
+  val cron4sCore = "com.github.alonsodomin.cron4s" %% "cron4s-core" % "0.6.1" cross CrossVersion.for3Use2_13 exclude ("org.typelevel", "*")
   val decline = "com.monovore" %% "decline" % "2.3.0"
   val disciplineMunit = "org.typelevel" %% "discipline-munit" % "1.0.9"
   val fs2Core = "co.fs2" %% "fs2-core" % "3.2.14"

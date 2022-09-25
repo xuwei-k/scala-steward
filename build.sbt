@@ -85,6 +85,7 @@ lazy val core = myCrossProject("core")
   .enablePlugins(BuildInfoPlugin, JavaAppPackaging, DockerPlugin)
   .settings(dockerSettings)
   .settings(
+    scalacOptions -= "-Xfatal-warnings",
     libraryDependencies ++= Seq(
       Dependencies.bcprovJdk15to18,
       Dependencies.betterFiles,
@@ -93,7 +94,6 @@ lazy val core = myCrossProject("core")
       Dependencies.catsParse,
       Dependencies.circeConfig,
       Dependencies.circeGeneric,
-      Dependencies.circeGenericExtras,
       Dependencies.circeParser,
       Dependencies.circeRefined,
       Dependencies.commonsIo,
@@ -267,7 +267,7 @@ lazy val commonSettings = Def.settings(
 )
 
 lazy val compileSettings = Def.settings(
-  scalaVersion := Scala213,
+  scalaVersion := "3.2.1-RC2",
   doctestTestFramework := DoctestTestFramework.Munit
 )
 
